@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gastapp.Pages.TodaySpendingsPage"
+             xmlns:vm="clr-namespace:Gastapp.ViewModels.TodaySpending"
+             xmlns:calendar="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar"
+             xmlns:model="clr-namespace:Gastapp.Models"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:converter="clr-namespace:Gastapp.Utils.Converters"
+             x:DataType="vm:TodaySpendingsViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title="Mis gastos de {date}">
+    <ContentPage.Resources>
+        <!-- Converter para DateToStrokeConverter -->
+        <converter:DateToStrokeConverter x:Key="DateToStrokeConverter" />
+    </ContentPage.Resources>
+    <Grid RowDefinitions="auto, auto, *" Padding="4">
+        <toolkit:Expander>
+            <toolkit:Expander.Header>
+                <HorizontalStackLayout Spacing="10">
+                    <Label Text="{Binding SelectedDate, StringFormat='{0:dddd dd MMMM}'}"
+                           FontAttributes="Bold"
+                           FontSize="Medium" />
+                    <Border Padding="5" StrokeShape="RoundRectangle 10" Margin="0">
+                        <Label Padding="0" Text="Ver mas" FontAttributes="Bold" FontSize="15"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <Border Padding="5" StrokeShape="RoundRectangle 10" Margin="0" HorizontalOptions="End">
+                        <Label Padding="0" Text="Dia" FontAttributes="Bold" FontSize="15" HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeSelectionModeCommand}" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </HorizontalStackLayout>
+            </toolkit:Expander.Header>
+            <calendar:SfCalendar
+                BackgroundColor="White"
+                NavigationDirection="Horizontal"
+                HeightRequest="150"
+                x:Name="calendar"
+                SelectionMode="{Binding SelectionMode}"
+                SelectionShape="Circle"
+                TodayHighlightBrush="Green"
+                SelectedDate="{Binding SelectedDate}"
+                MinimumDate="{Binding MinDate}"
+                MaximumDate="{Binding MaxDate}"
+                SelectionChangedCommand="{Binding SelectionChangedCommand}"
+                AllowViewNavigation="False"
+                View="Month">
+                <!--<calendar:SfCalendar.HeaderTemplate> 
+                <DataTemplate>
+                    <VerticalStackLayout Background = "#987D9A">
+                        <Label x:Name="label" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Start" Text="{Binding StartDateRange, StringFormat='{0:MMM}'}"/>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </calendar:SfCalendar.HeaderTemplate>-->
+                <calendar:SfCalendar.MonthView>
+                    <calendar:CalendarMonthView NumberOfVisibleWeeks="2">
+                    </calendar:CalendarMonthView>
+                </calendar:SfCalendar.MonthView>
+            </calendar:SfCalendar>
+        </toolkit:Expander>
+        <Label Grid.Row="1" FontSize="20">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span>Total gastado: </Span>
+                    <Span Text="{Binding TotalAmount, StringFormat='${0}'}" FontAttributes="Bold"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <CollectionView ItemsSource="{Binding SpendingList}" Margin="8" Grid.Row="2">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Spending">
+                    <Border Margin="0, 5">
+                        <AbsoluteLayout>
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Title}" FontSize="30" FontAttributes="Bold" />
+                                <Label Text="{Binding Amount, StringFormat='${0}'}" FontSize="25" />
+                                <Label Text="{Binding Category.CategoryName}" />
+                                <Label Text="{Binding SpendingDate}" />
+
+                            </VerticalStackLayout>
+                            <Button AbsoluteLayout.LayoutFlags="PositionProportional"
+                                    AbsoluteLayout.LayoutBounds="1, 0"
+                                    Text="X" BackgroundColor="Red" Padding="0" FontSize="15" FontAttributes="Bold"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type  vm:TodaySpendingsViewModel}}, Path=DeleteSpendingCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </AbsoluteLayout>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

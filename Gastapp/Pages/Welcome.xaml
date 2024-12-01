@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gastapp.Pages.Welcome"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             Title="Bienvenido"
+             xmlns:viewmodel="clr-namespace:Gastapp.ViewModels.Welcome"
+             x:DataType="viewmodel:WelcomeViewModel"
+             HideSoftInputOnTapped="True">
+    <ScrollView>
+        <VerticalStackLayout Margin="16, 20, 16, 8">
+            <Label
+                FontSize="45"
+                Text="¡Hola!"
+                VerticalOptions="Center"
+                HorizontalOptions="Center" />
+            <Label
+                HorizontalTextAlignment="Center"
+                FontSize="30"
+                LineBreakMode="WordWrap"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Padding="2"
+                Margin="0, 10, 0, 0">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Te damos la bienvenida a &#x0A;" />
+                        <Span FontAttributes="Bold, Italic">Gastapp</Span>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+            <Label
+                FontSize="20"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Padding="2"
+                Margin="0, 10, 0, 0"
+                Text="Lleva el control de tus gastos diarios de manera fácil. Registra tus gastos por categoría y obtén resúmenes diarios, semanales y mensuales."/>
+
+            <Label
+                FontSize="20"
+                HorizontalTextAlignment="Center"
+                Text="¡Empieza a administrar tu dinero de forma efectiva!"/>
+
+
+            <Label Text="¡Empecemos!" HorizontalTextAlignment="Center" FontSize="25" Margin="0, 15, 0, 0" />
+            <inputLayout:SfTextInputLayout
+                OutlineCornerRadius="10"
+                ContainerType="Outlined"
+                Margin="0, 10, 0, 0"
+                ContainerBackground="Transparent"
+                Hint="¿Cual es tu nombre?"
+                IsHintAlwaysFloated="True">
+
+                <Entry Placeholder="Tu nombre aquí" Keyboard="Text" ReturnType="Next" Text="{Binding Name}"/>
+
+            </inputLayout:SfTextInputLayout>
+
+            <inputLayout:SfTextInputLayout
+                OutlineCornerRadius="10"
+                ContainerType="Outlined"
+                Margin="0, 10, 0, 0"
+                ContainerBackground="Transparent"
+                IsHintAlwaysFloated="True"
+                Hint="Nombre de tu primera categoría de gastos">
+                <Entry Placeholder="Categoría" Keyboard="Text" Text="{Binding CategoryName}"/>
+
+            </inputLayout:SfTextInputLayout>
+
+            <Button Text="Aceptar" Margin="0, 10, 0, 0" Command="{Binding SaveChangesCommand}" IsEnabled="{Binding IsButtonActive}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

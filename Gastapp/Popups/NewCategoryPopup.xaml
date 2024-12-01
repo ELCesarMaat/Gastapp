@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    CanBeDismissedByTappingOutsideOfPopup="False"
+    Color="Transparent"
+    Size="{OnIdiom Phone='300, 250'}"
+    x:Class="Gastapp.Popups.NewCategoryPopup">
+    <Border Padding="10" Margin="20" StrokeThickness="0" StrokeShape="RoundRectangle 20" BackgroundColor="White">
+        <Grid 
+            Padding="20"
+              RowDefinitions="auto, auto, auto"
+              ColumnDefinitions="*, *"
+              BackgroundColor="Transparent">
+
+            <Label
+                Grid.ColumnSpan="2"
+                Text="Nueva categoría"
+                FontSize="20"
+                FontAttributes="Bold"
+                VerticalOptions="Center"
+                HorizontalOptions="Center" />
+
+            <inputLayout:SfTextInputLayout
+                Grid.Row="1" Grid.ColumnSpan="2"
+                Margin="5, 15" ContainerType="Outlined" FocusedStrokeThickness="1.5"
+                InputViewPadding="10, 5"
+                Hint="Nombre" ContainerBackground="White">
+                <Entry x:Name="txtCategory"/>
+            </inputLayout:SfTextInputLayout>
+
+            <Button
+                Margin="5"
+                Grid.Row="2" Grid.Column="1"
+                BackgroundColor="ForestGreen"
+                Text="Guardar"
+                Clicked="SaveClick" />
+            <Button
+                Margin="5"
+                Grid.Row="2" Grid.Column="0"
+                BackgroundColor="IndianRed"
+                Text="Cancelar"
+                Clicked="Button_OnClicked" />
+
+        </Grid>
+    </Border>
+</toolkit:Popup>

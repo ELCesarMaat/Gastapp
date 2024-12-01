@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gastapp.Pages.LoginPage"
+             xmlns:vm="clr-namespace:Gastapp.ViewModels.Login"
+             x:DataType="vm:LoginPageViewModel">
+    <ScrollView>
+        <VerticalStackLayout VerticalOptions="Center" Padding="8" Spacing="10">
+
+            <Label Text="Inicio de sesion" HorizontalTextAlignment="Center" FontSize="30" />
+            <Entry Placeholder="Usuario" Text="{Binding Email}"/>
+            <Entry Placeholder="Contraseña" Text="{Binding Password}"/>
+
+            <Button Text="Iniciar sesion" Command="{Binding LoginCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -2,6 +2,7 @@ using System.Text;
 using GastappApi;
 using GastappApi.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -26,21 +27,11 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<GastappDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new()
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey =
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:KEY"] ?? string.Empty)),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
-});
+builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<GastappDbContext>();
 
-builder.Services.AddSingleton<UserUtils>();
 
 var app = builder.Build();
+app.MapGroup("/Identity").MapIdentityApi<IdentityUser>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

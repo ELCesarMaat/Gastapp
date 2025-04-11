@@ -18,11 +18,15 @@ namespace Gastapp.ViewModels.TodaySpending
         private SpendingService _spendingService;
 
         private bool _isRangeSelected;
+        [ObservableProperty] private bool _isExpanderExpanded;
         [ObservableProperty] private float _totalAmount = 0;
+        [ObservableProperty] private float _calendarHeight = 150;
+        [ObservableProperty] private int _numbersVisibleWeeks = 2;
         [ObservableProperty] private CalendarSelectionMode _selectionMode = CalendarSelectionMode.Single;
         [ObservableProperty] private MonthTemplate _template;
         [ObservableProperty] private DateTime _startDateRange = DateTime.UnixEpoch;
         [ObservableProperty] private DateTime _endDateRange = DateTime.UnixEpoch;
+        [ObservableProperty] private CalendarDateRange _selectedDateRange = new(DateTime.Now, DateTime.Now);
         [ObservableProperty] private DateTime _maxDate = DateTime.Now;
         [ObservableProperty] private DateTime _minDate = DateTime.Now;
         [ObservableProperty] private DateTime _selectedDate = DateTime.Now;
@@ -32,28 +36,60 @@ namespace Gastapp.ViewModels.TodaySpending
         public TodaySpendingsViewModel(SpendingService spendingService)
         {
             _spendingService = spendingService;
-            GetData();
             Template = new MonthTemplate();
         }
 
         partial void OnSpendingListChanged(ObservableCollection<Spending> value)
         {
-            if (value.Count > 0)
+            if (value.Count == 0)
             {
-                TotalAmount = value.Sum(x => (float)x.Amount);
+                TotalAmount = 0;
+                return;
             }
+
+            TotalAmount = value.Sum(x => (float)x.Amount);
         }
 
         [RelayCommand]
-        private void ChangeSelectionMode()
+        private void ChangeExpanderExpanded()
         {
-            SelectionMode = SelectionMode == CalendarSelectionMode.Single
-                ? CalendarSelectionMode.Range
-                : CalendarSelectionMode.Single;
-            if (SelectionMode == CalendarSelectionMode.Single)
-                GetSpendingByDate(SelectedDate);
-            else
-                GetSpendingByDateRange(_startDateRange, _endDateRange);
+            IsExpanderExpanded = !IsExpanderExpanded;
+        }
+
+        [RelayCommand]
+        private void ChangeToDayMode()
+        {
+            SelectionMode = CalendarSelectionMode.Single;
+            SelectedDate = DateTime.Now;
+            CalendarHeight = 150;
+            NumbersVisibleWeeks = 2;
+            GetSpendingByDate(SelectedDate);
+        }
+
+        [RelayCommand]
+        private void ChangeToWeekMode()
+        {
+            SelectionMode = CalendarSelectionMode.Range;
+            SelectedDate = DateTime.Now;
+            StartDateRange = SelectedDate.AddDays(-(int)SelectedDate.DayOfWeek);
+            EndDateRange = StartDateRange.AddDays(6);
+            SelectedDateRange = new(StartDateRange, EndDateRange);
+            CalendarHeight = 150;
+            NumbersVisibleWeeks = 2;
+            GetSpendingByDateRange(StartDateRange, EndDateRange);
+        }
+
+        [RelayCommand]
+        private void ChangeToMonthMode()
+        {
+            SelectionMode = CalendarSelectionMode.Range;
+            SelectedDate = DateTime.Now;
+            StartDateRange = SelectedDate.AddDays(-(int)SelectedDate.DayOfWeek);
+            EndDateRange = StartDateRange.AddMonths(1).AddDays(-1);
+            SelectedDateRange = new(StartDateRange, EndDateRange);
+            CalendarHeight = 250;
+            NumbersVisibleWeeks = 5;
+            GetSpendingByDateRange(StartDateRange, EndDateRange);
         }
 
         [RelayCommand]
@@ -95,7 +131,7 @@ namespace Gastapp.ViewModels.TodaySpending
 
             GetSpendingByDate(SelectedDate);
 
-            if (SpendingList.Count > 0)
+            if (DatesWithSpending.Count > 0)
             {
                 MaxDate = DatesWithSpending.Max();
                 MinDate = DatesWithSpending.Min();
@@ -106,6 +142,9 @@ namespace Gastapp.ViewModels.TodaySpending
 
             if (DateTime.Now < MinDate)
                 MinDate = DateTime.Now;
+
+            MinDate = MinDate.AddMonths(-1);
+            MaxDate = MaxDate.AddMonths(1);
         }
 
         public void GetSpendingByDate(DateTime date)

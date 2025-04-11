@@ -17,6 +17,20 @@ namespace Gastapp.Services.User
             _userService = RestService.For<IUserService>(Constants.URL);
         }
 
+        public async Task<RegisterResponse> RegisterUserAsync(string email, string password, string name)
+        {
+            try
+            {
+                var response = await _userService.RegisterUserAsync(email, password, name);
+                return response;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new RegisterResponse();
+            }
+        }
+
         public async Task<LoginResponse> LoginAsync(string email, string password)
         {
             try

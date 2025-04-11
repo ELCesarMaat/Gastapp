@@ -16,38 +16,62 @@
         <converter:DateToStrokeConverter x:Key="DateToStrokeConverter" />
     </ContentPage.Resources>
     <Grid RowDefinitions="auto, auto, *" Padding="4">
-        <toolkit:Expander>
+        <toolkit:Expander IsExpanded="{Binding IsExpanderExpanded}">
             <toolkit:Expander.Header>
-                <HorizontalStackLayout Spacing="10">
-                    <Label Text="{Binding SelectedDate, StringFormat='{0:dddd dd MMMM}'}"
-                           FontAttributes="Bold"
-                           FontSize="Medium" />
-                    <Border Padding="5" StrokeShape="RoundRectangle 10" Margin="0">
-                        <Label Padding="0" Text="Ver mas" FontAttributes="Bold" FontSize="15"
-                               HorizontalOptions="Center" VerticalOptions="Center" />
-                    </Border>
-                    <Border Padding="5" StrokeShape="RoundRectangle 10" Margin="0" HorizontalOptions="End">
-                        <Label Padding="0" Text="Dia" FontAttributes="Bold" FontSize="15" HorizontalOptions="Center"
-                               VerticalOptions="Center" />
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ChangeSelectionModeCommand}" />
-                        </Border.GestureRecognizers>
-                    </Border>
-                </HorizontalStackLayout>
+                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Padding="4, 10">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="{Binding SelectedDate, StringFormat='{0:dddd dd MMMM}'}"
+                               FontAttributes="Bold"
+                               FontSize="Medium" />
+                        <Border Padding="5" StrokeShape="RoundRectangle 10" Margin="0">
+                            <Label Padding="0" Text="Ver mas" FontAttributes="Bold" FontSize="15"
+                                   HorizontalOptions="Center" VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ChangeExpanderExpandedCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Border>
+                        <Border Padding="5" StrokeShape="RoundRectangle 10" Margin="0" HorizontalOptions="End">
+                            <Label Padding="0" Text="Dia" FontAttributes="Bold" FontSize="15"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChangeToDayModeCommand}" />
+                            </Border.GestureRecognizers>
+                        </Border>
+                        <Border Padding="5" StrokeShape="RoundRectangle 10" Margin="0" HorizontalOptions="End">
+                            <Label Padding="0" Text="Semana" FontAttributes="Bold" FontSize="15"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChangeToWeekModeCommand}" />
+                            </Border.GestureRecognizers>
+                        </Border>
+                        <Border Padding="5" StrokeShape="RoundRectangle 10" Margin="0" HorizontalOptions="End">
+                            <Label Padding="0" Text="Mes" FontAttributes="Bold" FontSize="15"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChangeToMonthModeCommand}" />
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </HorizontalStackLayout>
+                </ScrollView>
+
             </toolkit:Expander.Header>
             <calendar:SfCalendar
                 BackgroundColor="White"
                 NavigationDirection="Horizontal"
-                HeightRequest="150"
                 x:Name="calendar"
-                SelectionMode="{Binding SelectionMode}"
-                SelectionShape="Circle"
+                HeightRequest="{Binding CalendarHeight}"
+                SelectionMode="{Binding SelectionMode, Mode=TwoWay}"
+                SelectedDateRange="{Binding SelectedDateRange, Mode=TwoWay}"
+                SelectionShape="Rectangle"
                 TodayHighlightBrush="Green"
                 SelectedDate="{Binding SelectedDate}"
                 MinimumDate="{Binding MinDate}"
                 MaximumDate="{Binding MaxDate}"
                 SelectionChangedCommand="{Binding SelectionChangedCommand}"
-                AllowViewNavigation="False"
                 View="Month">
                 <!--<calendar:SfCalendar.HeaderTemplate> 
                 <DataTemplate>
@@ -57,7 +81,7 @@
                 </DataTemplate>
             </calendar:SfCalendar.HeaderTemplate>-->
                 <calendar:SfCalendar.MonthView>
-                    <calendar:CalendarMonthView NumberOfVisibleWeeks="2">
+                    <calendar:CalendarMonthView NumberOfVisibleWeeks="{Binding NumbersVisibleWeeks}">
                     </calendar:CalendarMonthView>
                 </calendar:SfCalendar.MonthView>
             </calendar:SfCalendar>
@@ -66,7 +90,7 @@
             <Label.FormattedText>
                 <FormattedString>
                     <Span>Total gastado: </Span>
-                    <Span Text="{Binding TotalAmount, StringFormat='${0}'}" FontAttributes="Bold"/>
+                    <Span Text="{Binding TotalAmount, StringFormat='${0}'}" FontAttributes="Bold" />
                 </FormattedString>
             </Label.FormattedText>
         </Label>

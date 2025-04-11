@@ -46,31 +46,12 @@
                 Text="¡Empieza a administrar tu dinero de forma efectiva!"/>
 
 
-            <Label Text="¡Empecemos!" HorizontalTextAlignment="Center" FontSize="25" Margin="0, 15, 0, 0" />
-            <inputLayout:SfTextInputLayout
-                OutlineCornerRadius="10"
-                ContainerType="Outlined"
-                Margin="0, 10, 0, 0"
-                ContainerBackground="Transparent"
-                Hint="¿Cual es tu nombre?"
-                IsHintAlwaysFloated="True">
+            <Label Text="¡Empecemos!" HorizontalTextAlignment="Center" FontSize="25" Margin="0, 25, 0, 0" />
+            <Button Text="Registrarme" Margin="10, 20"/>
+            <Button Text="Iniciar sesión" Margin="10, 20"/>
 
-                <Entry Placeholder="Tu nombre aquí" Keyboard="Text" ReturnType="Next" Text="{Binding Name}"/>
 
-            </inputLayout:SfTextInputLayout>
-
-            <inputLayout:SfTextInputLayout
-                OutlineCornerRadius="10"
-                ContainerType="Outlined"
-                Margin="0, 10, 0, 0"
-                ContainerBackground="Transparent"
-                IsHintAlwaysFloated="True"
-                Hint="Nombre de tu primera categoría de gastos">
-                <Entry Placeholder="Categoría" Keyboard="Text" Text="{Binding CategoryName}"/>
-
-            </inputLayout:SfTextInputLayout>
-
-            <Button Text="Aceptar" Margin="0, 10, 0, 0" Command="{Binding SaveChangesCommand}" IsEnabled="{Binding IsButtonActive}"/>
+            <!--<Button Text="Aceptar" Margin="0, 10, 0, 0" Command="{Binding SaveChangesCommand}" IsEnabled="{Binding IsButtonActive}"/>-->
 
         </VerticalStackLayout>
     </ScrollView>
